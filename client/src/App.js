@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 
 function App() {
+
+
+  useEffect(() => {
+    async function fetchData(){
+      
+    }
+  })
 
 
   //////////////input modal////////////////
@@ -20,7 +27,7 @@ function App() {
   return (
     <div className="App container">
       <h1 style={{ margin: '10px', "textAlign": "center" }}>DataSet</h1>
-      
+
       <div className="row">
         <table class="table table-hover">
           <thead>
