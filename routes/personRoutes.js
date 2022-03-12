@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 
 
-router.get('/getAll', async (req, res) => {
+router.get('/get', async (req, res) => {
     try {
         const people = await Person.find({});
         res.send(people);

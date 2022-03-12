@@ -2,8 +2,11 @@ const express = require('express');
 const app = express();
 const db = require('./db.js');
 const personRouter = require('./routes/personRoutes.js')
+const morgan = require('morgan');
 
 const port = process.env.PORT || 8000;
+
+app.use(morgan('tiny'));
 app.use(express.json())
 app.use('/api/people', personRouter);
 
