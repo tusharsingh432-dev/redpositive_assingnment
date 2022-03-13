@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import axios from 'axios';
-
+import { validate } from 'react-email-validator';
+import DeleteIcon from './static/trash.svg';
+import EditIcon from './static/pencil-square.svg';
 function App() {
 
   const [userData, setUserData] = useState([]);
@@ -27,20 +29,26 @@ function App() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleAddUser = async () => {
-    const user = {
-      name,
-      email,
-      phone,
-      hobbies
+    if (name === "") { alert("Please enter a name") }
+    else if (phone === "") { alert("Please enter a phone number") }
+    else if (!validate(email)) { alert("Please enter a email address") }
+    else if (hobbies === "") { alert("Please enter your Hobbies") }
+    else {
+      const user = {
+        name,
+        email,
+        phone,
+        hobbies
+      }
+      try {
+        const response = await axios.post('/api/people/add', user);
+        window.location.reload();
+      } catch (err) {
+        alert('Something went wrong');
+        console.log(err);
+      }
+      setShow(false);
     }
-    try {
-      const response = await axios.post('/api/people/add', user);
-      window.location.reload();
-    } catch (err) {
-      alert('Something went wrong');
-      console.log(err);
-    }
-    setShow(false);
   }
   /////////////input////////////////
   const [name, setName] = useState('');
@@ -65,6 +73,11 @@ function App() {
     await axios.post('/api/mail', selectedRows);
   }
 
+  //////////////update and delete////////////////
+  const handleDelete = async (id) => {
+    const response = await axios.post('/api/people/delete', {id});
+    window.location.reload();
+  }
 
   return (
     <div className="App container">
@@ -95,7 +108,10 @@ function App() {
                     <td>{cur.phone}</td>
                     <td>{cur.email}</td>
                     <td>{cur.hobbies}</td>
-                    <td><i className="fa-light fa-pen-to-square"></i></td>
+                    <td style={{ textAlign: 'center' }}>
+                      <img src={DeleteIcon} alt='delete' onClick={() => handleDelete(cur.uid)} style={{ marginRight: '20px', cursor: 'pointer' }} />
+                      <img src={EditIcon} alt='update' style={{ cursor: 'pointer' }} />
+                    </td>
                   </tr>
                 })}
               </tbody>
