@@ -32,4 +32,15 @@ router.post('/add', async (req, res) => {
     }
 })
 
+router.post('/delete', async (req, res) => {
+    const uid = req.body;
+    console.log(uid);
+    try {
+        await Person.deleteOne({ uid: uid.id });
+        res.send('success');
+    } catch (err) {
+        res.status(404).send(err);
+    }
+})
+
 module.exports = router;
