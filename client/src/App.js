@@ -42,12 +42,28 @@ function App() {
     }
     setShow(false);
   }
-
   /////////////input////////////////
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [hobbies, setHobbies] = useState('');
+
+
+  ////////////////Send mail////////////////
+  const [selectedRows, setSelectedRows] = useState([]);
+  const handleCheck = (id) => {
+    let newSelectedRows = selectedRows;
+    if (selectedRows.includes(id)) {
+      newSelectedRows = newSelectedRows.filter(e => e !== id);
+    } else {
+      newSelectedRows.push(id);
+    }
+    setSelectedRows(newSelectedRows);
+  }
+  const handleSend = async () => {
+    console.log(selectedRows);
+    await axios.post('/api/mail', selectedRows);
+  }
 
 
   return (
@@ -73,7 +89,7 @@ function App() {
               <tbody>
                 {userData.map(cur => {
                   return <tr key={cur.uid}>
-                    <th scope="row"><input type="checkbox" /></th>
+                    <th scope="row"><input type="checkbox" onChange={() => { handleCheck(cur.uid) }} /></th>
                     <td>{cur.uid}</td>
                     <td>{cur.name}</td>
                     <td>{cur.phone}</td>
@@ -88,7 +104,7 @@ function App() {
       </div>
       <div className="row" style={{ "display": "flex", justifyContent: 'space-around' }}>
         <button type='button' className='btn btn-primary col-md-4' onClick={handleShow}>Add</button>
-        <button type='button' className='btn btn-primary col-md-4'>Send</button>
+        <button type='button' className='btn btn-primary col-md-4' onClick={handleSend}>Send</button>
       </div>
 
       <Modal show={show} onHide={handleClose}>
